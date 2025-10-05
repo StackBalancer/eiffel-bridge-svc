@@ -1,0 +1,19 @@
+image:
+  repository: localhost/eiffel-bridge
+  tag: latest
+  pullPolicy: IfNotPresent
+
+rabbitmq:
+  image: docker.io/rabbitmq:3-management
+  username: guest
+  password: guest
+  domainName: rabbitmq
+  ipAddress: 192.168.49.2
+  nodePort: 31672
+  amqpPort: 5672
+  uiPort: 15672
+  pullPolicy: IfNotPresent
+
+adapter:
+  port: 8080
+  replicas: 1

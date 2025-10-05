@@ -1,0 +1,12 @@
+{
+  "object_kind": "push",
+  "ref": "refs/heads/main",
+  "user_name": "user3",
+  "project": {
+    "git_http_url": "http://gitlab/root/myrepo.git"
+  },
+  "commits": [
+    { "id": "abc123ssdg", "message": "Initial commit" },
+    { "id": "def456ggfd", "message": "Fix bug 2" }
+  ]
+}

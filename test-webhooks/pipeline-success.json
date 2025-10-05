@@ -1,0 +1,15 @@
+{
+  "object_kind": "pipeline",
+  "object_attributes": {
+    "id": 1,
+    "status": "success",
+    "ref": "main",
+    "tag": false
+  },
+  "user": {
+    "name": "user2"
+  },
+  "project": {
+    "git_http_url": "http://gitlab/root/myrepo.git"
+  }
+}

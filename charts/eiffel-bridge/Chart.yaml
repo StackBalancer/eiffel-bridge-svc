@@ -1,0 +1,6 @@
+apiVersion: v2
+name: eiffel-bridge
+description: A Helm chart for deploying Eiffel Bridge (GitLab → Eiffel over RabbitMQ)
+type: application
+version: 0.1.0
+appVersion: "1.0"

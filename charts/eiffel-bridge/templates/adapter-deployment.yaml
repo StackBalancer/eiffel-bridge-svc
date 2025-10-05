@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eiffel-bridge
+spec:
+  replicas: {{ .Values.adapter.replicas }}
+  selector:
+    matchLabels:
+      app: eiffel-bridge
+  template:
+    metadata:
+      labels:
+        app: eiffel-bridge
+    spec:
+      hostNetwork: true
+      containers:
+        - name: eiffel-bridge
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.adapter.port }}
+          env:
+            - name: RABBIT_URL
+              value: "amqp://{{ .Values.rabbitmq.username }}:{{ .Values.rabbitmq.password }}@{{ .Values.rabbitmq.ipAddress }}:{{ .Values.rabbitmq.nodePort }}/"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eiffel-bridge
+spec:
+  type: ClusterIP
+  selector:
+    app: eiffel-bridge
+  ports:
+    - port: {{ .Values.adapter.port }}
+      targetPort: {{ .Values.adapter.port }}
+      protocol: TCP
