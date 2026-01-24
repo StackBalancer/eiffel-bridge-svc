@@ -11,6 +11,9 @@ import (
 )
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("Starting EiffelBridge Adapter...")
+	
 	var pub *publisher.RabbitPublisher
 	var err error
 
@@ -31,6 +34,12 @@ func main() {
 	}
 	defer pub.Close()
 
+	// Health check endpoint
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
+
 	http.HandleFunc("/webhook", func(w http.ResponseWriter, r *http.Request) {
 		gitlab.HandleWebhook(w, r, pub.Publish)
 	})
@@ -40,5 +49,7 @@ func main() {
 		port = "8080"
 	}
 	log.Printf("Adapter listening on :%s", port)
+	log.Printf("Health check available at /health")
+	log.Printf("Webhook endpoint available at /webhook")
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

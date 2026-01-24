@@ -47,8 +47,13 @@ func NewRabbitPublisher() (*RabbitPublisher, error) {
 }
 
 func (p *RabbitPublisher) Publish(event eiffel.Event) error {
-	body, _ := json.Marshal(event)
-	err := p.channel.Publish(
+	body, err := json.Marshal(event)
+	if err != nil {
+		log.Printf("failed to marshal event: %v", err)
+		return err
+	}
+	
+	err = p.channel.Publish(
 		"",           // exchange (empty → default direct)
 		p.queue.Name, // routing key
 		false,        // mandatory
@@ -59,9 +64,12 @@ func (p *RabbitPublisher) Publish(event eiffel.Event) error {
 		},
 	)
 	if err != nil {
-		log.Printf("failed to publish: %v", err)
+		log.Printf("failed to publish to queue %s: %v", p.queue.Name, err)
+		return err
 	}
-	return err
+	
+	log.Printf("Successfully published event %s to queue %s", event.Meta.Type, p.queue.Name)
+	return nil
 }
 
 func (p *RabbitPublisher) Close() {
